@@ -1,0 +1,52 @@
+{
+    "name": "Blue GeoLocation",
+    "short_name": "Blue",
+    "description": "Share your stories with the world and discover amazing places!",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#1a73e8",
+    "theme_color": "#1a73e8",
+    "icons": [
+        {
+            "src": "/images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Add New Story",
+            "short_name": "Add Story",
+            "description": "Add a new story to share with others",
+            "url": "/#/add",
+            "icons": [
+                {
+                    "src": "/images/icon-192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/images/screenshot-desktop.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "platform": "wide",
+            "label": "Blue GeoLocation on Desktop"
+        },
+        {
+            "src": "/images/screenshot-mobile.png",
+            "sizes": "750x1334",
+            "type": "image/png",
+            "platform": "narrow",
+            "label": "Blue GeoLocation on Mobile"
+        }
+    ]
+} 
