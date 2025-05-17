@@ -5,16 +5,28 @@ const { CacheFirst, NetworkFirst, StaleWhileRevalidate } = workbox.strategies;
 const { ExpirationPlugin } = workbox.expiration;
 const { precacheAndRoute } = workbox.precaching;
 
+const CACHE_NAME = 'restaurant-app-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/src/styles/main.css',
+  '/src/scripts/main.js',
+  '/src/scripts/app.js',
+  '/src/scripts/db.js',
+  '/src/scripts/idb.js',
+  '/images/icons/icon-72x72.png',
+  '/images/icons/icon-96x96.png',
+  '/images/icons/icon-128x128.png',
+  '/images/icons/icon-144x144.png',
+  '/images/icons/icon-152x152.png',
+  '/images/icons/icon-192x192.png',
+  '/images/icons/icon-384x384.png',
+  '/images/icons/icon-512x512.png',
+];
+
 // Precache static assets
-precacheAndRoute([
-  { url: '/', revision: '1' },
-  { url: '/index.html', revision: '1' },
-  { url: '/manifest.json', revision: '1' },
-  { url: '/images/icon-192.png', revision: '1' },
-  { url: '/images/icon-512.png', revision: '1' },
-  { url: '/images/screenshot-desktop.png', revision: '1' },
-  { url: '/images/screenshot-mobile.png', revision: '1' }
-]);
+precacheAndRoute(urlsToCache);
 
 // Cache CSS files
 registerRoute(
@@ -76,8 +88,8 @@ registerRoute(
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data.text(),
-    icon: '/images/icon-192.png',
-    badge: '/images/icon-192.png',
+    icon: '/images/icons/icon-192x192.png',
+    badge: '/images/icons/icon-72x72.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -86,14 +98,14 @@ self.addEventListener('push', (event) => {
     actions: [
       {
         action: 'explore',
-        title: 'View Details',
-        icon: '/images/icon-192.png'
+        title: 'Lihat Detail',
+        icon: '/images/icons/icon-72x72.png'
       }
     ]
   };
 
   event.waitUntil(
-    self.registration.showNotification('Blue GeoLocation', options)
+    self.registration.showNotification('Restaurant App', options)
   );
 });
 
@@ -115,12 +127,10 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 
   event.waitUntil(
-    Promise.all([
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.addAll(ASSETS_TO_CACHE);
-      }),
-      caches.open(STYLE_CACHE_NAME),
-    ])
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
@@ -131,7 +141,7 @@ self.addEventListener('activate', (event) => {
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME && cacheName !== STYLE_CACHE_NAME) {
+            if (cacheName !== CACHE_NAME) {
               return caches.delete(cacheName);
             }
           })
@@ -167,7 +177,7 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           const responseToCache = response.clone();
-          caches.open(STYLE_CACHE_NAME).then((cache) => {
+          caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseToCache);
           });
           return response;
@@ -180,26 +190,23 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then((response) => {
-      if (response) {
-        return response;
-      }
-
-      const fetchRequest = request.clone();
-
-      return fetch(fetchRequest).then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
+    caches.match(request)
+      .then((response) => {
+        if (response) {
           return response;
         }
-
-        const responseToCache = response.clone();
-
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(request, responseToCache);
-        });
-
-        return response;
-      });
-    })
+        return fetch(request)
+          .then((response) => {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(request, responseToCache);
+              });
+            return response;
+          });
+      })
   );
 });
