@@ -1,2 +1,22 @@
 Nama: Rofiatul Qosimah
-URL Deployment: https://rofiatulqosimah.github.io/dicoding--fe-mid-last-submission 
+URL Deployment: https://rofiatulqosimah.github.io/dicoding--fe-mid-last-submission
+
+Fitur yang diimplementasikan:
+1. Kriteria Wajib:
+   - Single Page Application dengan API
+   - Push Notification
+   - PWA (Installable & Offline)
+   - IndexedDB untuk penyimpanan data offline
+   - Deployment ke GitHub Pages
+
+2. Kriteria Opsional:
+   - Shortcuts dan Screenshots untuk Desktop dan Mobile
+   - Workbox untuk Offline Capability
+   - Halaman Not Found (404)
+
+Catatan:
+- Aplikasi dapat diakses secara offline
+- Dapat diinstall ke homescreen
+- Mendukung push notification
+- Menggunakan IndexedDB untuk penyimpanan data
+- Menggunakan Workbox untuk caching 
