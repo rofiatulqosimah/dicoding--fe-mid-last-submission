@@ -29,7 +29,7 @@ if ('serviceWorker' in navigator) {
     });
 
     navigator.serviceWorker
-      .register('/src/service-worker.js')
+      .register('/service-worker.js')
       .then((registration) => {
         console.info('ServiceWorker registration successful');
 
