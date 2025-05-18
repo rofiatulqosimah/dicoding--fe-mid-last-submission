@@ -5,7 +5,7 @@ const { CacheFirst, NetworkFirst, StaleWhileRevalidate } = workbox.strategies;
 const { ExpirationPlugin } = workbox.expiration;
 const { precacheAndRoute } = workbox.precaching;
 
-const CACHE_NAME = 'restaurant-app-v1';
+const CACHE_NAME = 'blue-geolocation-v1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -13,16 +13,8 @@ const urlsToCache = [
   '/src/styles/main.css',
   '/src/scripts/main.js',
   '/src/scripts/app.js',
-  '/src/scripts/db.js',
-  '/src/scripts/idb.js',
-  '/images/icons/icon-72x72.png',
-  '/images/icons/icon-96x96.png',
-  '/images/icons/icon-128x128.png',
-  '/images/icons/icon-144x144.png',
-  '/images/icons/icon-152x152.png',
-  '/images/icons/icon-192x192.png',
-  '/images/icons/icon-384x384.png',
-  '/images/icons/icon-512x512.png',
+  '/images/icon-192.png',
+  '/images/icon-512.png',
 ];
 
 // Precache static assets
@@ -125,7 +117,6 @@ self.addEventListener('message', (event) => {
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
@@ -152,50 +143,13 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  const url = new URL(request.url);
-
-  // Handle API requests differently
-  if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request)
-        .catch(() => {
-          // If offline, try to get from IndexedDB
-          return new Response(JSON.stringify({ error: 'Offline mode' }), {
-            headers: { 'Content-Type': 'application/json' }
-          });
-        })
-    );
-    return;
-  }
-
-  if (
-    request.url.endsWith('.css') ||
-    request.headers.get('Accept').includes('text/css')
-  ) {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-          return response;
-        })
-        .catch(() => {
-          return caches.match(request);
-        })
-    );
-    return;
-  }
-
   event.respondWith(
-    caches.match(request)
+    caches.match(event.request)
       .then((response) => {
         if (response) {
           return response;
         }
-        return fetch(request)
+        return fetch(event.request)
           .then((response) => {
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
@@ -203,7 +157,7 @@ self.addEventListener('fetch', (event) => {
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then((cache) => {
-                cache.put(request, responseToCache);
+                cache.put(event.request, responseToCache);
               });
             return response;
           });
