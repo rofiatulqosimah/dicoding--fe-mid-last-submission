@@ -2,12 +2,13 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  base: '/dicoding--fe-mid-last-submission/',
   server: {
     port: 5173,
     strictPort: true,
   },
   build: {
-    outDir: 'dist',
+    outDir: 'docs',
     assetsDir: 'assets',
     sourcemap: true,
   },
@@ -21,4 +22,5 @@ export default defineConfig({
   },
   publicDir: 'public',
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.svg', '**/*.gif'],
-}); 
+});
+
