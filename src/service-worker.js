@@ -13,8 +13,8 @@ const urlsToCache = [
   '/src/styles/main.css',
   '/src/scripts/main.js',
   '/src/scripts/app.js',
-  '/images/icon-192.png',
-  '/images/icon-512.png',
+  '/images/icon-72.png',
+  '/images/icon-96.png',
 ];
 
 // Precache static assets
@@ -80,8 +80,8 @@ registerRoute(
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data.text(),
-    icon: '/images/icons/icon-192x192.png',
-    badge: '/images/icons/icon-72x72.png',
+    icon: '/images/icon-72.png',
+    badge: '/images/icon-72.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -91,13 +91,13 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Lihat Detail',
-        icon: '/images/icons/icon-72x72.png'
+        icon: '/images/icon-72.png'
       }
     ]
   };
 
   event.waitUntil(
-    self.registration.showNotification('Restaurant App', options)
+    self.registration.showNotification('Blue GeoLocation', options)
   );
 });
 
