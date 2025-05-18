@@ -78,34 +78,47 @@ registerRoute(
 
 // Push notification event handler
 self.addEventListener('push', (event) => {
-  const options = {
-    body: event.data.text(),
-    icon: '/images/icon-72.png',
-    badge: '/images/icon-72.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'Lihat Detail',
-        icon: '/images/icon-72.png'
-      }
-    ]
+  const showNotification = async () => {
+    let data = {};
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data = {
+        title: 'Todo Baru telah ditambahkan!',
+        body: event.data.text() || 'Segera selesaikan sebelum tanggal 12 Desember 2025.'
+      };
+    }
+
+    const options = {
+      body: data.body,
+      icon: '/images/icon-72.png',
+      badge: '/images/icon-72.png',
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: 1,
+        url: data.url || '/'
+      },
+      actions: [
+        {
+          action: 'explore',
+          title: 'Lihat Detail',
+          icon: '/images/icon-72.png'
+        }
+      ]
+    };
+
+    await self.registration.showNotification(data.title, options);
   };
 
-  event.waitUntil(
-    self.registration.showNotification('Blue GeoLocation', options)
-  );
+  event.waitUntil(showNotification());
 });
 
 // Notification click handler
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
-    clients.openWindow('/')
+    clients.openWindow(event.notification.data.url || '/')
   );
 });
 

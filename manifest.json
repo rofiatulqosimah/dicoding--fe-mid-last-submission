@@ -8,14 +8,14 @@
     "theme_color": "#1a73e8",
     "icons": [
         {
-            "src": "/images/icon-192.png",
-            "sizes": "192x192",
+            "src": "/images/icon-72.png",
+            "sizes": "72x72",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/images/icon-512.png",
-            "sizes": "512x512",
+            "src": "/images/icon-96.png",
+            "sizes": "96x96",
             "type": "image/png",
             "purpose": "any maskable"
         }
@@ -28,8 +28,8 @@
             "url": "/#/add",
             "icons": [
                 {
-                    "src": "/images/icon-192.png",
-                    "sizes": "192x192",
+                    "src": "/images/icon-72.png",
+                    "sizes": "72x72",
                     "type": "image/png"
                 }
             ]

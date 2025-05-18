@@ -17,6 +17,8 @@ import { StoryPresenter } from './presenters/StoryPresenter.js';
 import { AuthPresenter } from './presenters/AuthPresenter.js';
 import { AddStoryPresenter } from './presenters/AddStoryPresenter.js';
 
+import { initializeNotification } from './scripts/notification.js';
+
 if ('serviceWorker' in navigator) {
   let cleanupInterval;
   window.addEventListener('load', () => {
@@ -139,6 +141,11 @@ class App {
       this.updateNavigationState();
     };
     window.addEventListener('auth-state-changed', this.authStateListener);
+
+    // Inisialisasi notifikasi saat aplikasi dimulai
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeNotification();
+    });
   }
 
   setupNavigation() {
